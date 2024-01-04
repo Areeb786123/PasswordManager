@@ -1,0 +1,29 @@
+package com.areeb.passwordmanager.utils.navigations.navigations
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.areeb.passwordmanager.ui.home.screens.Home
+import com.areeb.passwordmanager.ui.settings.screens.Settings
+import com.areeb.passwordmanager.ui.splash.screens.Splash
+import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.HOME
+import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SETTINGS
+import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SPLASH
+
+@Composable
+fun Navigation(navHostController: NavHostController) {
+    NavHost(navController = navHostController, startDestination = HOME) {
+        composable(HOME) {
+            Home(navHostController = navHostController)
+        }
+
+        composable(SPLASH) {
+            Splash(navHostController = navHostController)
+        }
+
+        composable(SETTINGS) {
+            Settings(navHostController = navHostController)
+        }
+    }
+}
