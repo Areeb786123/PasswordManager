@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,8 +48,16 @@ fun SetUpScreen(navHostController: NavHostController) {
         Image(
             painter = painterResource(id = R.drawable.ic_girl),
             contentDescription = "image",
-            modifier = Modifier.wrapContentSize().wrapContentHeight().align(Alignment.TopCenter),
+            modifier = Modifier.wrapContentSize().wrapContentHeight().align(Alignment.TopStart),
         )
+
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.width(90.dp).height(40.dp).align(Alignment.TopEnd)
+                .padding(end = 10.dp),
+        ) {
+            Text(text = "save")
+        }
         Body(navHostController = navHostController)
     }
 }
