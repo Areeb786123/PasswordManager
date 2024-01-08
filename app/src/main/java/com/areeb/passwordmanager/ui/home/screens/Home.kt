@@ -1,7 +1,9 @@
 package com.areeb.passwordmanager.ui.home.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -51,7 +53,10 @@ fun Home(navHostController: NavHostController) {
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_plus),
-                        modifier = Modifier.height(20.dp).width(30.dp).padding(end = 2.dp),
+                        modifier = Modifier
+                            .height(20.dp)
+                            .width(30.dp)
+                            .padding(end = 2.dp),
                         contentDescription = "image",
                     )
                     Text(text = "Add Account", textAlign = TextAlign.Start)
@@ -68,4 +73,6 @@ fun Home(navHostController: NavHostController) {
 
 @Composable
 private fun Content() {
+    Box(modifier = Modifier.fillMaxSize().background(colorResource(id = R.color.light_green))) {
+    }
 }

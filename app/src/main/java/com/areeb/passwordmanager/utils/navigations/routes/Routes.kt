@@ -6,5 +6,6 @@ class Routes {
         const val HOME = "home"
         const val SPLASH = "splash"
         const val SETTINGS = "settings"
+        const val SETUP_SCREEN = "setup_screen"
     }
 }

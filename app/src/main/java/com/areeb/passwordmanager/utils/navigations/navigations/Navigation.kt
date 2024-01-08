@@ -5,15 +5,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.areeb.passwordmanager.ui.home.screens.Home
+import com.areeb.passwordmanager.ui.setUpScreen.SetUpScreen
 import com.areeb.passwordmanager.ui.settings.screens.Settings
 import com.areeb.passwordmanager.ui.splash.screens.Splash
 import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.HOME
 import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SETTINGS
+import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SETUP_SCREEN
 import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SPLASH
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
-    NavHost(navController = navHostController, startDestination = HOME) {
+    NavHost(navController = navHostController, startDestination = SETUP_SCREEN) {
         composable(HOME) {
             Home(navHostController = navHostController)
         }
@@ -24,6 +26,10 @@ fun Navigation(navHostController: NavHostController) {
 
         composable(SETTINGS) {
             Settings(navHostController = navHostController)
+        }
+
+        composable(SETUP_SCREEN) {
+            SetUpScreen(navHostController = navHostController)
         }
     }
 }
