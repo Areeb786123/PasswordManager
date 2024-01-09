@@ -1,7 +1,6 @@
 package com.areeb.passwordmanager.data.network.locale.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.areeb.passwordmanager.data.models.entity.UserEntity
@@ -14,6 +13,6 @@ interface UserDao {
     @Query("SELECT * FROM  userEntity")
     suspend fun getUserDetail(): UserEntity
 
-    @Delete
+    @Query("DELETE FROM userEntity")
     suspend fun deleteUser()
 }

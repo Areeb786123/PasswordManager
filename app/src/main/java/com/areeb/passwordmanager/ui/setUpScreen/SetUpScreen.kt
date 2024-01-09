@@ -92,13 +92,12 @@ private fun Body(navHostController: NavHostController) {
             ) {
                 Button(
                     onClick = {
-
                     },
                     modifier = Modifier.fillMaxWidth().wrapContentHeight()
                         .padding(end = 20.dp, start = 20.dp, bottom = 10.dp),
                     colors = ButtonDefaults.buttonColors(colorResource(id = R.color.greish_black)),
 
-                    ) {
+                ) {
                     Text(text = "save")
                 }
             }
@@ -225,4 +224,3 @@ private fun FingerprintSection() {
         )
     }
 }
-

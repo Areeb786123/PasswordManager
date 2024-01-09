@@ -3,8 +3,6 @@ import org.jetbrains.kotlin.fir.expressions.FirEmptyArgumentList.arguments
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("kapt")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -42,11 +40,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -88,7 +86,7 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
     // To use Kotlin annotation processing tool (kapt)
-    ksp("androidx.room:room-compiler:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
@@ -97,5 +95,9 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
     implementation("androidx.hilt:hilt-work:1.0.0")
     // When using Kotlin.
-    ksp("androidx.hilt:hilt-compiler:1.0.0")
+    annotationProcessor("androidx.hilt:hilt-compiler:1.0.0")
+
+        //work issue with android +31
+    // for kotlin
+    implementation ("androidx.work:work-runtime-ktx:2.7.1")
 }
