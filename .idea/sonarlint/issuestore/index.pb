@@ -39,3 +39,11 @@ y
 Iapp/src/main/java/com/areeb/passwordmanager/ui/setUpScreen/SetUpScreen.kt,b/d/bd1b9518c7a0eeca7e2fc1591177d495097ca368
 m
 =app/src/main/java/com/areeb/passwordmanager/ui/theme/Color.kt,e/b/eb00c1cc33e0418c8f642e493556d0fcf126b374
+n
+>app/src/main/java/com/areeb/passwordmanager/MainApplication.kt,9/d/9d703d2313dc3656dc6621b1a82fe9cbe9168268
+P
+ app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
+~
+Napp/src/main/java/com/areeb/passwordmanager/data/network/locale/dao/UserDao.kt,7/c/7c248cd9493df79ac1d4ead3984822cabe52e629
+|
+Lapp/src/main/java/com/areeb/passwordmanager/data/models/entity/UserEntity.kt,2/5/25fc17fbe08c779f85506a1b75cca5973b3e0002

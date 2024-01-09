@@ -1,10 +1,10 @@
 package com.areeb.passwordmanager.ui.setUpScreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,11 +34,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
+import com.areeb.passwordmanager.data.models.entity.UserEntity
 import androidx.compose.foundation.layout.Column as Column
 
 @Composable
@@ -58,12 +58,14 @@ fun SetUpScreen(navHostController: NavHostController) {
     }
 }
 
-@Preview
 @Composable
 private fun Body(navHostController: NavHostController) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var otp by remember { mutableStateOf("") }
     var confirmOtp by remember { mutableStateOf("") }
+    var isButtonClicked by remember {
+        mutableStateOf(false)
+    }
 
     Card(
         modifier = Modifier
@@ -85,13 +87,27 @@ private fun Body(navHostController: NavHostController) {
             PinSection(otp = confirmOtp, onValueChange = { confirmOtp = it }, label = "Confirm Pin")
             FingerprintSection()
             Spacer(modifier = Modifier.padding(top = 8.dp))
-
+            ThrowErrorMessage(
+                errorInt = getUser(text.text, otp, confirmOtp).second,
+                isButtonClicked,
+            )
+            Spacer(modifier = Modifier.padding(top = 8.dp))
             Box(
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.BottomCenter,
             ) {
                 Button(
                     onClick = {
+                        val user = UserEntity(userName = text.text, password = otp)
+                        isButtonClicked = true
+                        if (getUser(
+                                userName = text.text,
+                                otp,
+                                confirmPass = confirmOtp,
+                            ).first
+                        ) {
+                            Log.e("tag", user.toString())
+                        }
                     },
                     modifier = Modifier.fillMaxWidth().wrapContentHeight()
                         .padding(end = 20.dp, start = 20.dp, bottom = 10.dp),
@@ -179,7 +195,7 @@ private fun PinSection(otp: String, onValueChange: (String) -> Unit, label: Stri
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
     OutlinedTextField(
-        value = otp,
+        value = otp.toString(),
         onValueChange = {
             if (otp.length <= 3) {
                 onValueChange(it)
@@ -198,7 +214,7 @@ private fun PinSection(otp: String, onValueChange: (String) -> Unit, label: Stri
             autoCorrect = true,
             keyboardType = KeyboardType.Number,
         ),
-        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.light_green)),
+        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.black)),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
 }
@@ -223,4 +239,67 @@ private fun FingerprintSection() {
             alignment = Alignment.Center,
         )
     }
+}
+
+private fun getUser(userName: String, pass: String, confirmPass: String): Pair<Boolean, Int> {
+    if (userName.isEmpty()) {
+        return Pair(false, 1)
+    }
+    if (pass.isEmpty() || pass.length <= 3) {
+        return Pair(false, 2)
+    }
+
+    if (confirmPass.isEmpty() || confirmPass.length <= 3) {
+        return Pair(false, 3)
+    }
+
+    if (confirmPass != pass) {
+        return Pair(false, 4)
+    }
+
+    return Pair(true, 5)
+}
+
+@Composable
+fun ThrowErrorMessage(errorInt: Int, isButtonClicked: Boolean) {
+    var errorMessage by remember {
+        mutableStateOf("")
+    }
+
+    if (isButtonClicked) {
+        when (errorInt) {
+            1 -> {
+                errorMessage = "userName can not be empty"
+            }
+
+            2 -> {
+                errorMessage = "pin can't be empty or <= 3"
+            }
+
+            3 -> {
+                errorMessage = "confirm pin  can't be empty or <= 3 "
+            }
+
+            4 -> {
+                errorMessage = "pin does not match"
+            }
+
+            5 -> {
+                errorMessage = ""
+            }
+
+            else -> {
+                errorMessage = ""
+            }
+        }
+    }
+
+    Text(
+        text = errorMessage,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth(),
+        fontSize = 12.sp,
+        fontWeight = FontWeight.SemiBold,
+        color = colorResource(id = R.color.red),
+    )
 }
