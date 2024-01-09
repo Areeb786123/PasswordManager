@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,11 +14,13 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,16 +51,9 @@ fun SetUpScreen(navHostController: NavHostController) {
         Image(
             painter = painterResource(id = R.drawable.ic_girl),
             contentDescription = "image",
-            modifier = Modifier.wrapContentSize().wrapContentHeight().align(Alignment.TopStart),
+            modifier = Modifier.wrapContentSize().wrapContentHeight().align(Alignment.TopCenter),
         )
 
-        Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier.width(90.dp).height(40.dp).align(Alignment.TopEnd)
-                .padding(end = 10.dp),
-        ) {
-            Text(text = "save")
-        }
         Body(navHostController = navHostController)
     }
 }
@@ -65,72 +61,89 @@ fun SetUpScreen(navHostController: NavHostController) {
 @Preview
 @Composable
 private fun Body(navHostController: NavHostController) {
+    var text by remember { mutableStateOf(TextFieldValue("")) }
+    var otp by remember { mutableStateOf("") }
+    var confirmOtp by remember { mutableStateOf("") }
+
     Card(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = 60.dp,
-
-            ),
+            .padding(top = 60.dp),
         shape = CardDefaults.shape,
         colors = CardDefaults.cardColors(colorResource(id = R.color.white)),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_drawer),
-                contentDescription = "image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
+            HeaderSection()
+            ImageSection()
+            InputSection(
+                text = text,
+                onValueChange = { text = it },
+                placeholder = "username",
+                leadingIcon = R.drawable.ic_person,
             )
-            Spacer(modifier = Modifier.padding(top = 10.dp))
+            PinSection(otp = otp, onValueChange = { otp = it }, label = "Set Pin")
+            PinSection(otp = confirmOtp, onValueChange = { confirmOtp = it }, label = "Confirm Pin")
+            FingerprintSection()
+            Spacer(modifier = Modifier.padding(top = 8.dp))
 
-            Text(
-                text = "Add New Account",
-                textAlign = TextAlign.Start,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = 10.dp),
-            )
-            Spacer(modifier = Modifier.padding(top = 20.dp))
-            Image(
-                painter = painterResource(id = R.drawable.ic_pass),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp),
-                contentDescription = "image",
-            )
-            Spacer(modifier = Modifier.padding(top = 10.dp))
-            UserName()
-            SetPin()
-            ConfirmPin()
-            Spacer(
-                modifier = Modifier.padding(top = 10.dp),
-            )
-            Text(
-                text = "Set FingerPrint",
-                modifier = Modifier.padding(start = 10.dp),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp,
-            )
+            Box(
+                modifier = Modifier.fillMaxHeight(),
+                contentAlignment = Alignment.BottomCenter,
+            ) {
+                Button(
+                    onClick = {
 
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Image(
-                    painter = painterResource(id = R.drawable.baseline_fingerprint_24),
-                    contentDescription = "image",
-                    modifier = Modifier.width(70.dp).height(70.dp),
-                    alignment = Alignment.Center,
-                )
+                    },
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight()
+                        .padding(end = 20.dp, start = 20.dp, bottom = 10.dp),
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.greish_black)),
+
+                    ) {
+                    Text(text = "save")
+                }
             }
         }
     }
 }
 
+@Composable
+private fun HeaderSection() {
+    Column {
+        Image(
+            painter = painterResource(id = R.drawable.ic_drawer),
+            contentDescription = "image",
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+        )
+        Spacer(modifier = Modifier.padding(top = 10.dp))
+        Text(
+            text = "Add New Account",
+            textAlign = TextAlign.Start,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(start = 10.dp),
+        )
+        Spacer(modifier = Modifier.padding(top = 20.dp))
+    }
+}
+
+@Composable
+private fun ImageSection() {
+    Image(
+        painter = painterResource(id = R.drawable.ic_pass),
+        modifier = Modifier.fillMaxWidth().height(70.dp),
+        contentDescription = "image",
+    )
+    Spacer(modifier = Modifier.padding(top = 10.dp))
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun UserName() {
-    Spacer(modifier = Modifier.padding(top = 30.dp))
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+private fun InputSection(
+    text: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    placeholder: String,
+    leadingIcon: Int,
+) {
     Text(
         text = "Enter your name",
         textAlign = TextAlign.Start,
@@ -141,48 +154,36 @@ private fun UserName() {
     Spacer(modifier = Modifier.padding(top = 10.dp))
     OutlinedTextField(
         value = text,
-        onValueChange = {
-            text = it
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 10.dp, end = 10.dp),
-        placeholder = { Text(text = "username") },
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp),
+        placeholder = { Text(text = placeholder) },
         leadingIcon = {
             Image(
-                painter = painterResource(id = R.drawable.ic_person),
+                painter = painterResource(id = leadingIcon),
                 contentDescription = "image",
             )
         },
-
+        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.light_green)),
     )
+    Spacer(modifier = Modifier.padding(top = 10.dp))
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SetPin() {
-    Spacer(modifier = Modifier.padding(top = 10.dp))
+private fun PinSection(otp: String, onValueChange: (String) -> Unit, label: String) {
     Text(
-        text = "Set Pin",
+        text = label,
         textAlign = TextAlign.Start,
         fontSize = 16.sp,
         fontWeight = FontWeight.Medium,
         modifier = Modifier.padding(start = 20.dp),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
-    OtpField()
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun OtpField() {
-    var otp by remember {
-        mutableStateOf("")
-    }
     OutlinedTextField(
         value = otp,
         onValueChange = {
             if (otp.length <= 3) {
-                otp = it
+                onValueChange(it)
             }
         },
         modifier = Modifier
@@ -198,48 +199,30 @@ fun OtpField() {
             autoCorrect = true,
             keyboardType = KeyboardType.Number,
         ),
+        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.light_green)),
     )
+    Spacer(modifier = Modifier.padding(top = 10.dp))
 }
 
 @Composable
-private fun ConfirmPin() {
-    Spacer(modifier = Modifier.padding(top = 10.dp))
+private fun FingerprintSection() {
     Text(
-        text = "Confirm Pin",
-        textAlign = TextAlign.Start,
+        text = "Set FingerPrint",
+        modifier = Modifier.padding(start = 10.dp),
+        fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
-        fontWeight = FontWeight.Medium,
-        modifier = Modifier.padding(start = 20.dp),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
-    ConfirmOtpField()
+    Box(
+        modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.baseline_fingerprint_24),
+            contentDescription = "image",
+            modifier = Modifier.width(70.dp).height(70.dp),
+            alignment = Alignment.Center,
+        )
+    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ConfirmOtpField() {
-    var otp by remember {
-        mutableStateOf("")
-    }
-    OutlinedTextField(
-        value = otp,
-        onValueChange = {
-            if (otp.length <= 3) {
-                otp = it
-            }
-        },
-        modifier = Modifier
-            .padding(start = 10.dp, end = 10.dp)
-            .fillMaxWidth(),
-        leadingIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.ic_password),
-                contentDescription = "image",
-            )
-        },
-        keyboardOptions = KeyboardOptions(
-            autoCorrect = true,
-            keyboardType = KeyboardType.Number,
-        ),
-    )
-}

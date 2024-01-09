@@ -37,3 +37,5 @@ X
 (gradle/wrapper/gradle-wrapper.properties,f/b/fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 y
 Iapp/src/main/java/com/areeb/passwordmanager/ui/setUpScreen/SetUpScreen.kt,b/d/bd1b9518c7a0eeca7e2fc1591177d495097ca368
+m
+=app/src/main/java/com/areeb/passwordmanager/ui/theme/Color.kt,e/b/eb00c1cc33e0418c8f642e493556d0fcf126b374
