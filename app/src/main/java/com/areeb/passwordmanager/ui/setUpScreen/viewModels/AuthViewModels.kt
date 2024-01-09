@@ -5,11 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.areeb.passwordmanager.data.Repository.AuthRepository
 import com.areeb.passwordmanager.data.models.entity.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModels @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
+
+    private val _user = MutableStateFlow<UserEntity>(UserEntity(userName = "", password = ""))
+    val user: StateFlow<UserEntity> get() = _user
 
     fun saveUser(userEntity: UserEntity) {
         viewModelScope.launch {
@@ -17,9 +23,11 @@ class AuthViewModels @Inject constructor(private val authRepository: AuthReposit
         }
     }
 
-    fun getUser(userEntity: UserEntity) {
+    fun getUser() {
         viewModelScope.launch {
-            authRepository.getUser()
+            authRepository.getUser().collectLatest {
+                _user.value = it
+            }
         }
     }
 

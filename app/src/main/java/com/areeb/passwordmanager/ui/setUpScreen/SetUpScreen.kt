@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,7 +50,7 @@ fun SetUpScreen(navHostController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.light_green)),
+            .background(colorResource(id = R.color.dark_blue)),
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_girl),
@@ -61,6 +62,7 @@ fun SetUpScreen(navHostController: NavHostController) {
     }
 }
 
+@Preview
 @Composable
 private fun Body(navHostController: NavHostController) {
     val homeViewModels: AuthViewModels = hiltViewModel()
@@ -73,10 +75,9 @@ private fun Body(navHostController: NavHostController) {
 
     Card(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 60.dp),
+            .fillMaxSize().padding(top = 60.dp),
         shape = CardDefaults.shape,
-        colors = CardDefaults.cardColors(colorResource(id = R.color.white)),
+        colors = CardDefaults.cardColors(colorResource(id = R.color.black)),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             HeaderSection()
@@ -117,7 +118,7 @@ private fun Body(navHostController: NavHostController) {
                     },
                     modifier = Modifier.fillMaxWidth().wrapContentHeight()
                         .padding(end = 20.dp, start = 20.dp, bottom = 10.dp),
-                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.greish_black)),
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.dark_blue)),
 
                 ) {
                     Text(text = "save")
@@ -142,6 +143,7 @@ private fun HeaderSection() {
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(start = 10.dp),
+            color = colorResource(id = R.color.white),
         )
         Spacer(modifier = Modifier.padding(top = 20.dp))
     }
@@ -171,6 +173,7 @@ private fun InputSection(
         fontSize = 16.sp,
         fontWeight = FontWeight.Medium,
         modifier = Modifier.padding(start = 20.dp),
+        color = colorResource(id = R.color.white),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
     OutlinedTextField(
@@ -184,7 +187,7 @@ private fun InputSection(
                 contentDescription = "image",
             )
         },
-        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.black)),
+        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.white)),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
 }
@@ -198,6 +201,7 @@ private fun PinSection(otp: String, onValueChange: (String) -> Unit, label: Stri
         fontSize = 16.sp,
         fontWeight = FontWeight.Medium,
         modifier = Modifier.padding(start = 20.dp),
+        color = colorResource(id = R.color.white),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
     OutlinedTextField(
@@ -220,7 +224,7 @@ private fun PinSection(otp: String, onValueChange: (String) -> Unit, label: Stri
             autoCorrect = true,
             keyboardType = KeyboardType.Number,
         ),
-        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.black)),
+        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.white)),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
 }
@@ -232,6 +236,7 @@ private fun FingerprintSection() {
         modifier = Modifier.padding(start = 10.dp),
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
+        color = colorResource(id = R.color.white),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
     Box(

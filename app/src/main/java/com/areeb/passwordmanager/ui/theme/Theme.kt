@@ -58,7 +58,7 @@ fun PasswordManagerTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = ContextCompat.getColor(view.context, R.color.light_green)
+            window.statusBarColor = ContextCompat.getColor(view.context, R.color.dark_blue)
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
