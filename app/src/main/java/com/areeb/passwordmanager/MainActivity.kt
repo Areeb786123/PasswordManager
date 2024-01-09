@@ -10,7 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.areeb.passwordmanager.ui.theme.PasswordManagerTheme
 import com.areeb.passwordmanager.utils.navigations.navigations.Navigation
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,5 +30,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-

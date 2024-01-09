@@ -92,4 +92,10 @@ dependencies {
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
+
+    // hilt
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    implementation("androidx.hilt:hilt-work:1.0.0")
+    // When using Kotlin.
+    ksp("androidx.hilt:hilt-compiler:1.0.0")
 }
