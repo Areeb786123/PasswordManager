@@ -1,11 +1,13 @@
 package com.areeb.passwordmanager.ui.home.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -24,10 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
@@ -44,7 +46,7 @@ fun Home(navHostController: NavHostController) {
                     .padding(bottom = 40.dp)
                     .width(170.dp)
                     .height(50.dp),
-                containerColor = colorResource(id = R.color.greish_black),
+                containerColor = colorResource(id = R.color.black),
                 contentColor = Color.White,
                 onClick = { /*TODO*/ },
                 shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
@@ -85,6 +87,15 @@ private fun Content() {
             .fillMaxSize()
             .background(colorResource(id = R.color.light_green)),
     ) {
-        Text(text = user.toString(), modifier = Modifier.fillMaxSize(), fontSize = 20.sp)
+    }
+}
+
+@Composable
+fun Header() {
+    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+        Image(
+            painter = painterResource(id = R.drawable.drawer_stroke),
+            contentDescription = "image",
+        )
     }
 }

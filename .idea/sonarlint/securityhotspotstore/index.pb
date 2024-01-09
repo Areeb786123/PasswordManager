@@ -47,3 +47,7 @@ P
 Lapp/src/main/java/com/areeb/passwordmanager/data/models/entity/UserEntity.kt,2/5/25fc17fbe08c779f85506a1b75cca5973b3e0002
 ~
 Napp/src/main/java/com/areeb/passwordmanager/data/network/locale/dao/UserDao.kt,7/c/7c248cd9493df79ac1d4ead3984822cabe52e629
+}
+Mapp/src/main/java/com/areeb/passwordmanager/data/Repository/AuthRepository.kt,3/4/343304755b18771448ff81c4844512d4f6d5445f
+‡
+Wapp/src/main/java/com/areeb/passwordmanager/ui/setUpScreen/viewModels/AuthViewModels.kt,d/e/deeab1041a1a5156e5107287142068296ebf03bc
