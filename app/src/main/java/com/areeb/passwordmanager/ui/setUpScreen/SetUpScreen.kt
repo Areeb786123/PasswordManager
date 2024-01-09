@@ -36,9 +36,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
 import com.areeb.passwordmanager.data.models.entity.UserEntity
+import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
+import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.HOME
 import androidx.compose.foundation.layout.Column as Column
 
 @Composable
@@ -60,6 +63,7 @@ fun SetUpScreen(navHostController: NavHostController) {
 
 @Composable
 private fun Body(navHostController: NavHostController) {
+    val homeViewModels: AuthViewModels = hiltViewModel()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var otp by remember { mutableStateOf("") }
     var confirmOtp by remember { mutableStateOf("") }
@@ -107,6 +111,8 @@ private fun Body(navHostController: NavHostController) {
                             ).first
                         ) {
                             Log.e("tag", user.toString())
+                            homeViewModels.saveUser(user)
+                            navHostController.navigate(HOME)
                         }
                     },
                     modifier = Modifier.fillMaxWidth().wrapContentHeight()
@@ -178,7 +184,7 @@ private fun InputSection(
                 contentDescription = "image",
             )
         },
-        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.light_green)),
+        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.black)),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
 }

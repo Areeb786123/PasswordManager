@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.fir.expressions.FirEmptyArgumentList.arguments
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -83,21 +85,24 @@ dependencies {
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 
     // To use Kotlin annotation processing tool (kapt)
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
-    // hilt
-    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
-    implementation("androidx.hilt:hilt-work:1.0.0")
-    // When using Kotlin.
-    annotationProcessor("androidx.hilt:hilt-compiler:1.0.0")
-
-        //work issue with android +31
+    // work issue with android +31
     // for kotlin
-    implementation ("androidx.work:work-runtime-ktx:2.7.1")
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+}
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
