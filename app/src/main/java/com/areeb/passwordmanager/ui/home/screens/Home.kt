@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,8 +27,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
+import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,6 +77,14 @@ fun Home(navHostController: NavHostController) {
 
 @Composable
 private fun Content() {
-    Box(modifier = Modifier.fillMaxSize().background(colorResource(id = R.color.light_green))) {
+    val viewModels: AuthViewModels = hiltViewModel()
+    viewModels.getUser()
+    val user = viewModels.user.collectAsState()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.light_green)),
+    ) {
+        Text(text = user.toString(), modifier = Modifier.fillMaxSize(), fontSize = 20.sp)
     }
 }
