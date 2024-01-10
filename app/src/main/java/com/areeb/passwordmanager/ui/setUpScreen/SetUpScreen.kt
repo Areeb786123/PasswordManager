@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -62,7 +62,6 @@ fun SetUpScreen(navHostController: NavHostController) {
     }
 }
 
-@Preview
 @Composable
 private fun Body(navHostController: NavHostController) {
     val homeViewModels: AuthViewModels = hiltViewModel()
@@ -76,7 +75,7 @@ private fun Body(navHostController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxSize().padding(top = 60.dp),
-        shape = CardDefaults.shape,
+        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         colors = CardDefaults.cardColors(colorResource(id = R.color.black)),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
