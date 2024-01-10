@@ -101,6 +101,14 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.7.1")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // System Ui Controller
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.20.1")
+
+    // bottom sheet
+    implementation("androidx.compose.ui:ui:1.2.0-beta02")
+    implementation("androidx.compose.material:material:1.2.0-beta02")
+    implementation ("androidx.compose.material3:material3:1.2.0-alpha02")
 }
 // Allow references to generated code
 kapt {

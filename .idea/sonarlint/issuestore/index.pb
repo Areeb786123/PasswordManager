@@ -51,3 +51,5 @@ Lapp/src/main/java/com/areeb/passwordmanager/data/models/entity/UserEntity.kt,2
 Mapp/src/main/java/com/areeb/passwordmanager/data/Repository/AuthRepository.kt,3/4/343304755b18771448ff81c4844512d4f6d5445f
 ‡
 Wapp/src/main/java/com/areeb/passwordmanager/ui/setUpScreen/viewModels/AuthViewModels.kt,d/e/deeab1041a1a5156e5107287142068296ebf03bc
+j
+:app/src/main/java/com/areeb/passwordmanager/utils/utils.kt,1/c/1c2d47ba8c682b44f118fcc1c0517048c3441788
