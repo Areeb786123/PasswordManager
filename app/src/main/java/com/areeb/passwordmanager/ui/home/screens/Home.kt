@@ -3,11 +3,13 @@ package com.areeb.passwordmanager.ui.home.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,14 +24,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,13 +47,19 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
+import com.areeb.passwordmanager.ui.addPassScreen.AddPassScreen
+import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
+import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SETUP_SCREEN
 import com.areeb.passwordmanager.utils.statusColorChanger
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -56,6 +70,9 @@ fun Home(navHostController: NavHostController) {
     statusColorChanger(color = colorResource(id = R.color.black))
     val systemUiController = rememberSystemUiController()
     systemUiController.isSystemBarsVisible = false
+    var isBottomSheetOpen by remember {
+        mutableStateOf(false)
+    }
     Scaffold(
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -65,7 +82,9 @@ fun Home(navHostController: NavHostController) {
                     .height(70.dp),
                 containerColor = colorResource(id = R.color.dark_blue),
                 contentColor = Color.White,
-                onClick = { /*TODO*/ },
+                onClick = {
+                    isBottomSheetOpen = true
+                },
                 shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
 
             ) {
@@ -88,21 +107,27 @@ fun Home(navHostController: NavHostController) {
         },
         floatingActionButtonPosition = FabPosition.Center,
         content = {
-            Content()
+            Content(navHostController)
+            if (isBottomSheetOpen) {
+                AddPassScreen(
+                    showBottomSheet = {
+                        isBottomSheetOpen = it
+                    },
+                )
+            }
         },
 
     )
 }
 
-@Preview
 @Composable
-private fun Content() {
+private fun Content(navigationHost: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.black)),
     ) {
-        CustomTopBar()
+        CustomTopBar(navigationHost)
         Spacer(modifier = Modifier.padding(top = 4.dp))
         SearchBar()
         PasswordSection()
@@ -110,7 +135,10 @@ private fun Content() {
 }
 
 @Composable
-private fun CustomTopBar() {
+private fun CustomTopBar(navigationHost: NavHostController) {
+    var isDashBoardVisible by remember {
+        mutableStateOf(false)
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -176,10 +204,22 @@ private fun CustomTopBar() {
                     painter = painterResource(id = R.drawable.baseline_menu_24),
                     modifier = Modifier
                         .width(70.dp)
-                        .height(70.dp),
+                        .height(70.dp)
+                        .clickable {
+                            isDashBoardVisible = true
+                        },
                     contentDescription = "image",
                     contentScale = ContentScale.Inside,
+
                 )
+                if (isDashBoardVisible) {
+                    CustomDialog(
+                        showDialog = {
+                            isDashBoardVisible = it
+                        },
+                        navigationHost,
+                    )
+                }
             }
         }
     }
@@ -314,3 +354,44 @@ private fun dummyText(): List<String> {
     )
 }
 
+@Composable
+private fun CustomDialog(showDialog: (Boolean) -> Unit, navigationHost: NavHostController) {
+    val viewModel: AuthViewModels = hiltViewModel()
+    Dialog(
+        onDismissRequest = { showDialog(false) },
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
+    ) {
+        Surface(
+            shape = RoundedCornerShape(12.dp),
+            color = colorResource(id = R.color.white),
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxHeight()
+                .width(240.dp),
+        ) {
+            Column {
+                Text(
+                    text = "Logout",
+                    fontStyle = FontStyle.Normal,
+                    fontSize = 18.sp,
+                    modifier = Modifier
+                        .padding(start = 10.dp, top = 20.dp)
+                        .clickable {
+                            viewModel.deleteUser()
+                            navigationHost.navigate(SETUP_SCREEN)
+                        },
+                    textAlign = TextAlign.Start,
+                    color = colorResource(id = R.color.black),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp),
+                    thickness = 1.dp,
+                    color = colorResource(id = R.color.greish_black),
+                )
+            }
+        }
+    }
+}
