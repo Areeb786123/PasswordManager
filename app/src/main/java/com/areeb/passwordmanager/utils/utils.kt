@@ -12,3 +12,11 @@ fun statusColorChanger(color: Color) {
         systemUiController.setSystemBarsColor(color)
     }
 }
+
+
+interface StringConstant {
+    companion object {
+        const val PASSWORD_MANAGER_ENTITY = "passwordManagerEntity"
+    }
+
+}

@@ -1,4 +1,4 @@
-package com.areeb.passwordmanager.ui.addPassScreen
+package com.areeb.passwordmanager.ui.addPassword
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,17 +8,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,13 +31,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPassScreen(
-    showBottomSheet: (Boolean) -> Unit,
-) {
+fun AddPasswordScreen(navHostController: NavHostController) {
     var appName by remember {
         mutableStateOf("")
     }
@@ -50,17 +45,7 @@ fun AddPassScreen(
     var password by remember {
         mutableStateOf("")
     }
-
-    val modalSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    ModalBottomSheet(
-        onDismissRequest = {
-            showBottomSheet(false)
-        },
-        sheetState = modalSheetState,
-        dragHandle = { BottomSheetDefaults.DragHandle() },
-        containerColor = colorResource(id = R.color.greish_black),
-        modifier = Modifier.padding(top = 30.dp),
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -71,7 +56,7 @@ fun AddPassScreen(
                 ),
         ) {
             Text(
-                text = "Save Crediantials",
+                text = "Add your Password",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 10.dp),
@@ -87,7 +72,9 @@ fun AddPassScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 Card(
-                    modifier = Modifier.width(80.dp).height(80.dp),
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(80.dp),
                     shape = RoundedCornerShape(12.dp),
                 ) {
                     Image(
@@ -119,14 +106,18 @@ fun AddPassScreen(
                     color = colorResource(
                         id = R.color.white,
 
-                    ),
+                        ),
                     fontWeight = FontWeight.SemiBold,
                 ),
-                modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp, top = 20.dp),
+                modifier = Modifier
+                    .imePadding()
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp, top = 20.dp),
             )
             Text(
                 text = "App Name",
                 modifier = Modifier
+                    .imePadding()
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 10.dp),
                 textAlign = TextAlign.Start,
@@ -145,10 +136,13 @@ fun AddPassScreen(
                     color = colorResource(
                         id = R.color.white,
 
-                    ),
+                        ),
                     fontWeight = FontWeight.SemiBold,
                 ),
-                modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp, top = 20.dp),
+                modifier = Modifier
+                    .imePadding()
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp, top = 20.dp),
             )
             Text(
                 text = "App Name",
@@ -171,12 +165,15 @@ fun AddPassScreen(
                     color = colorResource(
                         id = R.color.white,
 
-                    ),
+                        ),
                     fontWeight = FontWeight.SemiBold,
                 ),
-                modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp, top = 20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding()
+                    .padding(start = 10.dp, end = 10.dp, top = 20.dp),
 
-            )
+                )
             Spacer(modifier = Modifier.padding(top = 20.dp))
             Button(
                 onClick = { /*TODO*/ },
@@ -190,7 +187,9 @@ fun AddPassScreen(
                     color = colorResource(
                         id = R.color.white,
                     ),
-                    modifier = Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp),
                 )
             }
         }

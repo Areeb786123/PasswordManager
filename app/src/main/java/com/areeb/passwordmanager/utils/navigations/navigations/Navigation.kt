@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.areeb.passwordmanager.ui.addPassScreen.AddPassScreen
+import com.areeb.passwordmanager.ui.addPassword.AddPasswordScreen
 import com.areeb.passwordmanager.ui.home.screens.Home
 import com.areeb.passwordmanager.ui.setUpScreen.SetUpScreen
 import com.areeb.passwordmanager.ui.settings.screens.Settings
@@ -33,5 +33,17 @@ fun Navigation(navHostController: NavHostController) {
         composable(SETUP_SCREEN) {
             SetUpScreen(navHostController = navHostController)
         }
+        composable(ADD_PASS_SCREEN) {
+            AddPasswordScreen(navHostController = navHostController)
+        }
+
+//        composable("$ADD_PASS_SCREEN/{passModel}") {
+//            val userModel = it.arguments?.getString("passModel")
+//            userModel?.let {
+//                AddPasswordScreen(navHostController = navHostController, userModel)
+//            }
+//        }
+
+
     }
 }

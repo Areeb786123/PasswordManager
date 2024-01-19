@@ -57,8 +57,10 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
-import com.areeb.passwordmanager.ui.addPassScreen.AddPassScreen
+import com.areeb.passwordmanager.data.models.entity.PmEntity
+import com.areeb.passwordmanager.ui.detail.DetailScreen
 import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
+import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.ADD_PASS_SCREEN
 import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SETUP_SCREEN
 import com.areeb.passwordmanager.utils.statusColorChanger
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -70,9 +72,6 @@ fun Home(navHostController: NavHostController) {
     statusColorChanger(color = colorResource(id = R.color.black))
     val systemUiController = rememberSystemUiController()
     systemUiController.isSystemBarsVisible = false
-    var isBottomSheetOpen by remember {
-        mutableStateOf(false)
-    }
     Scaffold(
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -83,11 +82,11 @@ fun Home(navHostController: NavHostController) {
                 containerColor = colorResource(id = R.color.dark_blue),
                 contentColor = Color.White,
                 onClick = {
-                    isBottomSheetOpen = true
+                    navHostController.navigate(ADD_PASS_SCREEN)
                 },
                 shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
 
-            ) {
+                ) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -108,16 +107,9 @@ fun Home(navHostController: NavHostController) {
         floatingActionButtonPosition = FabPosition.Center,
         content = {
             Content(navHostController)
-            if (isBottomSheetOpen) {
-                AddPassScreen(
-                    showBottomSheet = {
-                        isBottomSheetOpen = it
-                    },
-                )
-            }
         },
 
-    )
+        )
 }
 
 @Composable
@@ -130,7 +122,7 @@ private fun Content(navigationHost: NavHostController) {
         CustomTopBar(navigationHost)
         Spacer(modifier = Modifier.padding(top = 4.dp))
         SearchBar()
-        PasswordSection()
+        PasswordSection(navigationHost)
     }
 }
 
@@ -211,7 +203,7 @@ private fun CustomTopBar(navigationHost: NavHostController) {
                     contentDescription = "image",
                     contentScale = ContentScale.Inside,
 
-                )
+                    )
                 if (isDashBoardVisible) {
                     CustomDialog(
                         showDialog = {
@@ -260,7 +252,7 @@ private fun SearchBar() {
                     color = colorResource(
                         id = R.color.white,
 
-                    ),
+                        ),
                     fontWeight = FontWeight.SemiBold,
                 ),
             )
@@ -269,7 +261,7 @@ private fun SearchBar() {
 }
 
 @Composable
-private fun PasswordSection() {
+private fun PasswordSection(navigationHost: NavHostController) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
             text = "Saved Password",
@@ -283,18 +275,32 @@ private fun PasswordSection() {
             color = colorResource(id = R.color.white),
         )
         Spacer(modifier = Modifier.padding(top = 10.dp))
-        PasswordList()
+        PasswordList(navHostController = navigationHost)
     }
 }
 
 @Composable
-private fun PasswordList() {
+private fun PasswordList(navHostController: NavHostController) {
+    var isBottomSheetOpen by remember {
+        mutableStateOf(false)
+    }
+    var appName by remember {
+        mutableStateOf("")
+    }
+    var pass by remember {
+        mutableStateOf("")
+    }
     LazyColumn(content = {
         items(dummyText()) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(80.dp)
+                    .clickable {
+                        isBottomSheetOpen = true
+                        appName = it
+                        pass = it
+                    }
                     .padding(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 10.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(colorResource(id = R.color.greish_black)),
@@ -331,11 +337,18 @@ private fun PasswordList() {
                         fontWeight = FontWeight.SemiBold,
                         color = colorResource(id = R.color.white),
 
-                    )
+                        )
                 }
             }
         }
     })
+
+    if (isBottomSheetOpen) {
+        DetailScreen(
+            showBottomSheet = { isBottomSheetOpen = it },
+            passWordModel = PmEntity(0, appName, pass)
+        )
+    }
 }
 
 private fun dummyText(): List<String> {
@@ -395,3 +408,5 @@ private fun CustomDialog(showDialog: (Boolean) -> Unit, navigationHost: NavHostC
         }
     }
 }
+
+
