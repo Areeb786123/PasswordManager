@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.areeb.passwordmanager.data.AppDatabase
 import com.areeb.passwordmanager.data.AppDatabase.Companion.DATA_BASE_NAME
+import com.areeb.passwordmanager.data.network.locale.dao.PmDao
 import com.areeb.passwordmanager.data.network.locale.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -25,5 +26,11 @@ object Injection {
     @Singleton
     fun providesUserDao(appDatabase: AppDatabase): UserDao {
         return appDatabase.userDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesPmDao(appDatabase: AppDatabase): PmDao {
+        return appDatabase.pmDao()
     }
 }
