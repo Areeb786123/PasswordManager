@@ -1,6 +1,7 @@
 package com.areeb.passwordmanager.ui.home.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +22,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -33,10 +33,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,15 +54,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.room.util.query
 import com.areeb.passwordmanager.R
 import com.areeb.passwordmanager.data.models.entity.PmEntity
 import com.areeb.passwordmanager.ui.detail.DetailScreen
+import com.areeb.passwordmanager.ui.home.HomeViewModels
 import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
 import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.ADD_PASS_SCREEN
 import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SETUP_SCREEN
@@ -112,8 +119,10 @@ fun Home(navHostController: NavHostController) {
         )
 }
 
+@Preview
 @Composable
 private fun Content(navigationHost: NavHostController) {
+    val homeViewModels: HomeViewModels = hiltViewModel()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -121,8 +130,8 @@ private fun Content(navigationHost: NavHostController) {
     ) {
         CustomTopBar(navigationHost)
         Spacer(modifier = Modifier.padding(top = 4.dp))
-        SearchBar()
-        PasswordSection(navigationHost)
+        SearchBar(homeViewModels)
+        PasswordSection(navigationHost, homeViewModels)
     }
 }
 
@@ -219,7 +228,13 @@ private fun CustomTopBar(navigationHost: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SearchBar() {
+private fun SearchBar(homeViewModel: HomeViewModels) {
+    var query by remember {
+        mutableStateOf("")
+    }
+    var enable by remember {
+        mutableStateOf(false)
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -228,40 +243,65 @@ private fun SearchBar() {
         shape = RoundedCornerShape(6.dp),
         colors = CardDefaults.cardColors(colorResource(id = R.color.greish_black)),
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_search),
-                contentDescription = "image",
-                modifier = Modifier
-                    .width(30.dp)
-                    .height(30.dp),
-            )
-            Spacer(modifier = Modifier.padding(start = 6.dp))
-            BasicTextField(
-                value = "hello ",
-                onValueChange = {},
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                textStyle = TextStyle(
-                    fontSize = 16.sp,
-                    color = colorResource(
-                        id = R.color.white,
 
-                        ),
-                    fontWeight = FontWeight.SemiBold,
-                ),
-            )
-        }
+        TextField(
+            value = query,
+            onValueChange = {
+                query = it
+                homeViewModel.setQuery(it)
+            },
+            enabled = enable,
+            placeholder = {
+                Text("Find your account here")
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    enable = true
+                },
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = "image",
+                    modifier = Modifier
+                        .width(20.dp)
+                        .height(20.dp)
+                )
+            },
+
+            trailingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_clean),
+                    contentDescription = "image",
+                    modifier = Modifier
+                        .width(20.dp)
+                        .height(20.dp)
+                        .clickable {
+                            query = ""
+                            homeViewModel.setQuery("")
+                            enable = false
+                        }
+                )
+
+            },
+
+            colors = TextFieldDefaults.colors(colorResource(id = R.color.greish_black)),
+            singleLine = true,
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                color = colorResource(
+                    id = R.color.white,
+
+                    ),
+                fontWeight = FontWeight.SemiBold,
+            ),
+        )
     }
 }
 
+
 @Composable
-private fun PasswordSection(navigationHost: NavHostController) {
+private fun PasswordSection(navigationHost: NavHostController, homeViewModels: HomeViewModels) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
             text = "Saved Password",
@@ -275,12 +315,13 @@ private fun PasswordSection(navigationHost: NavHostController) {
             color = colorResource(id = R.color.white),
         )
         Spacer(modifier = Modifier.padding(top = 10.dp))
-        PasswordList(navHostController = navigationHost)
+        PasswordList(navHostController = navigationHost, homeViewModels)
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-private fun PasswordList(navHostController: NavHostController) {
+private fun PasswordList(navHostController: NavHostController, homeViewModels: HomeViewModels) {
     var isBottomSheetOpen by remember {
         mutableStateOf(false)
     }
@@ -290,8 +331,20 @@ private fun PasswordList(navHostController: NavHostController) {
     var pass by remember {
         mutableStateOf("")
     }
+
+    val query = homeViewModels.query.collectAsState().value
+
+
+    val passWordList = if (query.isEmpty()) {m
+        dummyText()
+
+    } else {
+        dummyText().filter { it.contains(query) }
+    }
+    Log.e("checkingqq", homeViewModels.query.value)
+
     LazyColumn(content = {
-        items(dummyText()) {
+        items(passWordList) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
