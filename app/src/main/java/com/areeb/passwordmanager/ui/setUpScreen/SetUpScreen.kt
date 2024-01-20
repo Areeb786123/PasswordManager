@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -188,7 +189,11 @@ private fun InputSection(
                 contentDescription = "image",
             )
         },
-        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.white)),
+
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            Color.White, //
+            Color.White// Set the default text color here // Set the placeholder color if needed
+        ),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
 }
@@ -225,7 +230,11 @@ private fun PinSection(otp: String, onValueChange: (String) -> Unit, label: Stri
             autoCorrect = true,
             keyboardType = KeyboardType.Number,
         ),
-        colors = TextFieldDefaults.outlinedTextFieldColors(colorResource(id = R.color.white)),
+
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            Color.White, //
+            Color.White// Set the default text color here // Set the placeholder color if needed
+        ),
     )
     Spacer(modifier = Modifier.padding(top = 10.dp))
 }
