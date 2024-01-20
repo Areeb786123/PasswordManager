@@ -289,7 +289,7 @@ private fun SearchBar(homeViewModel: HomeViewModels) {
             textStyle = TextStyle(
                 fontSize = 16.sp,
                 color = colorResource(
-                    id = R.color.white,
+                    id = R.color.black,
 
                     ),
                 fontWeight = FontWeight.SemiBold,
@@ -340,7 +340,6 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
     } else {
         dummyText().filter { it.contains(query) }
     }
-    Log.e("checkingqq", homeViewModels.query.value)
 
     LazyColumn(content = {
         items(passWordList) {
@@ -398,7 +397,7 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
     if (isBottomSheetOpen) {
         DetailScreen(
             showBottomSheet = { isBottomSheetOpen = it },
-            passWordModel = PmEntity(0, appName, pass)
+            passWordModel = PmEntity(0, appName, "jaiho@gmail.com", "BhagJaslmksmmsmmk")
         )
     }
 }
