@@ -335,7 +335,7 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
     val query = homeViewModels.query.collectAsState().value
 
 
-    val passWordList = if (query.isEmpty()) {m
+    val passWordList = if (query.isEmpty()) {
         dummyText()
 
     } else {
