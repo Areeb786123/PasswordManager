@@ -31,20 +31,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
+import com.areeb.passwordmanager.data.models.entity.PmEntity
+import com.areeb.passwordmanager.ui.addPassword.viewModels.AddDataViewModels
 
 @Composable
 fun AddPasswordScreen(navHostController: NavHostController) {
     var appName by remember {
         mutableStateOf("")
     }
-    var login by remember {
+    var loginEmail by remember {
         mutableStateOf("")
     }
     var password by remember {
         mutableStateOf("")
     }
+    val viewModel: AddDataViewModels = hiltViewModel()
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -115,7 +119,7 @@ fun AddPasswordScreen(navHostController: NavHostController) {
                     .padding(start = 10.dp, end = 10.dp, top = 20.dp),
             )
             Text(
-                text = "App Name",
+                text = "login email",
                 modifier = Modifier
                     .imePadding()
                     .fillMaxWidth()
@@ -127,9 +131,9 @@ fun AddPasswordScreen(navHostController: NavHostController) {
             )
             Spacer(modifier = Modifier.padding(top = 6.dp))
             TextField(
-                value = login,
+                value = loginEmail,
                 onValueChange = {
-                    login = it
+                    loginEmail = it
                 },
                 textStyle = TextStyle(
                     fontSize = 16.sp,
@@ -145,7 +149,7 @@ fun AddPasswordScreen(navHostController: NavHostController) {
                     .padding(start = 10.dp, end = 10.dp, top = 20.dp),
             )
             Text(
-                text = "App Name",
+                text = "password",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 10.dp),
@@ -176,7 +180,18 @@ fun AddPasswordScreen(navHostController: NavHostController) {
                 )
             Spacer(modifier = Modifier.padding(top = 20.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    val pmEntity = PmEntity(
+                        id = 0,
+                        appName = appName,
+                        loginEmail = loginEmail,
+                        password = password
+                    )
+                    viewModel.addCredentials(
+                        pmEntity
+                    )
+                    
+                },
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp),
             ) {
                 Text(

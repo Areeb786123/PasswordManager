@@ -9,5 +9,6 @@ data class PmEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val appName: String,
+    val loginEmail: String,
     val password: String,
 )

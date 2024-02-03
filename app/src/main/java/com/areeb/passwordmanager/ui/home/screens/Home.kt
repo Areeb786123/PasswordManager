@@ -332,6 +332,10 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
         mutableStateOf("")
     }
 
+    var loginEmail by remember {
+        mutableStateOf("")
+    }
+
     val query = homeViewModels.query.collectAsState().value
 
 
@@ -353,6 +357,8 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
                         isBottomSheetOpen = true
                         appName = it
                         pass = it
+                        loginEmail = it
+
                     }
                     .padding(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 10.dp),
                 shape = RoundedCornerShape(10.dp),
@@ -399,7 +405,7 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
     if (isBottomSheetOpen) {
         DetailScreen(
             showBottomSheet = { isBottomSheetOpen = it },
-            passWordModel = PmEntity(0, appName, pass)
+            passWordModel = PmEntity(0, appName, loginEmail ,pass)
         )
     }
 }

@@ -67,3 +67,7 @@ u
 Eapp/src/main/java/com/areeb/passwordmanager/ui/detail/DetailScreen.kt,0/a/0a5619012c94a326724514c699817c4ce2d60fd0
 u
 Eapp/src/main/java/com/areeb/passwordmanager/ui/home/HomeViewModels.kt,8/5/85d52fdfbfa83bc45fa62e639b71c0c2ee3b50b4
+Š
+Zapp/src/main/java/com/areeb/passwordmanager/ui/addPassword/viewModels/AddDataViewModels.kt,1/b/1bd791143c39f9a17ec4554edc6d5f9e6126e817
+{
+Kapp/src/main/java/com/areeb/passwordmanager/data/Repository/PMRepository.kt,a/2/a22bbf7f3603dccb9913f931b8b0084c011e4e2a
