@@ -17,7 +17,7 @@ import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SPLAS
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
-    NavHost(navController = navHostController, startDestination = HOME) {
+    NavHost(navController = navHostController, startDestination = SPLASH) {
         composable(HOME) {
             Home(navHostController = navHostController)
         }

@@ -17,6 +17,10 @@ class AuthViewModels @Inject constructor(private val authRepository: AuthReposit
     private val _user = MutableStateFlow<UserEntity>(UserEntity(userName = "", password = ""))
     val user: StateFlow<UserEntity> get() = _user
 
+    init {
+        getUser()
+    }
+
     fun saveUser(userEntity: UserEntity) {
         viewModelScope.launch {
             authRepository.saveUser(userEntity)

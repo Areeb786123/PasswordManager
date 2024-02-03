@@ -1,8 +1,83 @@
 package com.areeb.passwordmanager.ui.splash.screens
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.areeb.passwordmanager.R
+import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
+import com.areeb.passwordmanager.utils.navigations.routes.Routes
+import com.areeb.passwordmanager.utils.statusColorChanger
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun Splash(navHostController: NavHostController) {
+    statusColorChanger(color = colorResource(id = R.color.black))
+    val systemUiController = rememberSystemUiController()
+    systemUiController.isSystemBarsVisible = false
+    SplashScreen(navHostController = navHostController)
+}
+
+@SuppressLint("CoroutineCreationDuringComposition", "UnrememberedMutableState")
+@Composable
+fun SplashScreen(navHostController: NavHostController) {
+    val viewModels: AuthViewModels = hiltViewModel()
+    val currentUser = viewModels.user.collectAsState()
+    var screenToNavigate by mutableStateOf("")
+    var navigate by mutableStateOf(false)
+    val job = rememberCoroutineScope()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.black)), contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            contentDescription = "image",
+            modifier = Modifier
+                .width(100.dp)
+                .height(100.dp), // Add your modifier here if needed
+            tint = androidx.compose.ui.graphics.Color.White
+        )
+
+
+        job.launch {
+            withContext(Dispatchers.Main) {
+                delay(500)
+                screenToNavigate = if (currentUser.value.userName.isEmpty()) {
+                    Routes.SETUP_SCREEN
+                } else {
+                    Routes.HOME
+                }
+
+                navHostController.navigate(screenToNavigate)
+            }
+        }
+
+
+    }
+
 }
