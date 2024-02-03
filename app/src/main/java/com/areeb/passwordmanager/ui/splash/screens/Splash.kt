@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,9 +24,7 @@ import com.areeb.passwordmanager.R
 import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
 import com.areeb.passwordmanager.utils.navigations.routes.Routes
 import com.areeb.passwordmanager.utils.statusColorChanger
-import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -47,7 +44,6 @@ fun SplashScreen(navHostController: NavHostController) {
     val viewModels: AuthViewModels = hiltViewModel()
     val currentUser = viewModels.user.collectAsState()
     var screenToNavigate by mutableStateOf("")
-    var navigate by mutableStateOf(false)
     val job = rememberCoroutineScope()
     Box(
         modifier = Modifier
