@@ -40,7 +40,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,9 +60,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.room.util.query
 import com.areeb.passwordmanager.R
 import com.areeb.passwordmanager.data.models.entity.PmEntity
+import com.areeb.passwordmanager.ui.addPassword.viewModels.AddDataViewModels
 import com.areeb.passwordmanager.ui.detail.DetailScreen
 import com.areeb.passwordmanager.ui.home.HomeViewModels
 import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
@@ -123,6 +122,7 @@ fun Home(navHostController: NavHostController) {
 @Composable
 private fun Content(navigationHost: NavHostController) {
     val homeViewModels: HomeViewModels = hiltViewModel()
+    val dataViewModels: AddDataViewModels = hiltViewModel()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -131,7 +131,7 @@ private fun Content(navigationHost: NavHostController) {
         CustomTopBar(navigationHost)
         Spacer(modifier = Modifier.padding(top = 4.dp))
         SearchBar(homeViewModels)
-        PasswordSection(navigationHost, homeViewModels)
+        PasswordSection(navigationHost, homeViewModels, dataViewModels)
     }
 }
 
@@ -301,7 +301,11 @@ private fun SearchBar(homeViewModel: HomeViewModels) {
 
 
 @Composable
-private fun PasswordSection(navigationHost: NavHostController, homeViewModels: HomeViewModels) {
+private fun PasswordSection(
+    navigationHost: NavHostController,
+    homeViewModels: HomeViewModels,
+    dataViewModels: AddDataViewModels
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
             text = "Saved Password",
@@ -315,15 +319,27 @@ private fun PasswordSection(navigationHost: NavHostController, homeViewModels: H
             color = colorResource(id = R.color.white),
         )
         Spacer(modifier = Modifier.padding(top = 10.dp))
-        PasswordList(navHostController = navigationHost, homeViewModels)
+        PasswordList(navHostController = navigationHost, homeViewModels, dataViewModels)
     }
 }
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-private fun PasswordList(navHostController: NavHostController, homeViewModels: HomeViewModels) {
+private fun PasswordList(
+    navHostController: NavHostController,
+    homeViewModels: HomeViewModels,
+    dataViewModels: AddDataViewModels
+) {
+
+
+    val dataList = dataViewModels.allCredentials.collectAsState()
+
     var isBottomSheetOpen by remember {
         mutableStateOf(false)
+    }
+
+    var id by remember {
+        mutableStateOf(0)
     }
     var appName by remember {
         mutableStateOf("")
@@ -340,13 +356,11 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
 
 
     val passWordList = if (query.isEmpty()) {
-        dummyText()
-
+        dataList.value
     } else {
-        dummyText().filter { it.contains(query) }
+        dataList.value.filter { it.appName.contains(query) }
     }
-    Log.e("checkingqq", homeViewModels.query.value)
-
+    Log.e("checkinq", homeViewModels.query.value)
     LazyColumn(content = {
         items(passWordList) {
             Card(
@@ -355,9 +369,10 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
                     .height(80.dp)
                     .clickable {
                         isBottomSheetOpen = true
-                        appName = it
-                        pass = it
-                        loginEmail = it
+                        id = it.id
+                        appName = it.appName
+                        pass = it.password
+                        loginEmail = it.loginEmail
 
                     }
                     .padding(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 10.dp),
@@ -381,16 +396,18 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
                         ),
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_default_profile),
+                            painter = painterResource(id = R.drawable.password_icons),
                             contentDescription = "image",
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .width(50.dp)
+                                .height(50.dp),
                             contentScale = ContentScale.FillBounds,
                         )
                     }
 
                     Spacer(modifier = Modifier.padding(start = 10.dp))
                     Text(
-                        text = it.toString(),
+                        text = it.appName,
                         textAlign = TextAlign.Center,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -405,26 +422,13 @@ private fun PasswordList(navHostController: NavHostController, homeViewModels: H
     if (isBottomSheetOpen) {
         DetailScreen(
             showBottomSheet = { isBottomSheetOpen = it },
-            passWordModel = PmEntity(0, appName, loginEmail ,pass)
+            passWordModel = PmEntity(id, appName, loginEmail, pass)
         )
+    } else {
+        dataViewModels.getAllCredentials()
     }
 }
 
-private fun dummyText(): List<String> {
-    return listOf(
-        "facebook",
-        "instagram",
-        "X",
-        "google",
-        "yahoo",
-        "galgotias",
-        "TurnsApp",
-        "NoteApp",
-        "SekaiSheet",
-        "School",
-        "college",
-    )
-}
 
 @Composable
 private fun CustomDialog(showDialog: (Boolean) -> Unit, navigationHost: NavHostController) {

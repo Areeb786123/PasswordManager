@@ -40,8 +40,6 @@ class AuthViewModels @Inject constructor(private val authRepository: AuthReposit
         viewModelScope.launch {
             authRepository.getUser().collectLatest {
                 _user.value = it
-
-
             }
         }
     }

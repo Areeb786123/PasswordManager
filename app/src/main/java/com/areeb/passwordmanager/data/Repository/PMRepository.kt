@@ -1,5 +1,6 @@
 package com.areeb.passwordmanager.data.Repository
 
+import android.util.Log
 import com.areeb.passwordmanager.data.AppDatabase
 import com.areeb.passwordmanager.data.models.entity.PmEntity
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,7 @@ class PMRepository @Inject constructor(private val appDatabase: AppDatabase) {
             println(e.printStackTrace())
         }
     }
+
     suspend fun updateCredentials(pmEntity: PmEntity) {
         try {
             appDatabase.pmDao().updateCredentials(pmEntity)
@@ -28,6 +30,7 @@ class PMRepository @Inject constructor(private val appDatabase: AppDatabase) {
         try {
             appDatabase.pmDao().deleteCredentials(pmEntity)
         } catch (e: Exception) {
+            Log.e("pmRepoDelete", e.message.toString())
             println(e.printStackTrace())
         }
     }

@@ -21,7 +21,10 @@ class AddDataViewModels @Inject constructor(private val pmRepository: PMReposito
         private val TAG = "addDataViewModels"
     }
 
-    private fun getAllCredentials() {
+    init {
+        getAllCredentials()
+    }
+     fun getAllCredentials() {
         viewModelScope.launch {
             pmRepository.getAllCredentials().collectLatest {
                 _allCredentials.value = it

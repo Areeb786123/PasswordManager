@@ -62,6 +62,7 @@ android {
 }
 
 dependencies {
+    val compose_version = "1.5.2"
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -112,8 +113,16 @@ dependencies {
     // bottom sheet
     implementation("androidx.compose.ui:ui:1.2.0-beta02")
     implementation("androidx.compose.material:material:1.2.0-beta02")
-    implementation ("androidx.compose.material3:material3:1.2.0-alpha02")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha02")
 
+    //saltx
+    implementation("org.mindrot:jbcrypt:0.4")
+
+    //lottie
+    implementation("androidx.compose.ui:ui:$compose_version")
+    implementation("androidx.compose.ui:ui-tooling:$compose_version")
+    implementation("androidx.compose.foundation:foundation:$compose_version")
+    implementation("com.airbnb.android:lottie-compose:6.0.1")
 
 }
 // Allow references to generated code

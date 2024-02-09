@@ -71,3 +71,9 @@ Eapp/src/main/java/com/areeb/passwordmanager/ui/home/HomeViewModels.kt,8/5/85d5
 Zapp/src/main/java/com/areeb/passwordmanager/ui/addPassword/viewModels/AddDataViewModels.kt,1/b/1bd791143c39f9a17ec4554edc6d5f9e6126e817
 {
 Kapp/src/main/java/com/areeb/passwordmanager/data/Repository/PMRepository.kt,a/2/a22bbf7f3603dccb9913f931b8b0084c011e4e2a
+k
+;app/src/main/java/com/areeb/passwordmanager/utils/Hasher.kt,c/0/c0e307ba19feb791e96cbf04b1a5a9b60b58e487
+s
+Capp/src/main/java/com/areeb/passwordmanager/utils/hashing/Hasher.kt,0/f/0f0cb974e8df2d29a689b2b2e8a19a8ebbab46cc
+w
+Gapp/src/main/java/com/areeb/passwordmanager/utils/themes/randomColor.kt,7/1/7186fb59de5d06077eac31aeb7f9193c467cf1ef
