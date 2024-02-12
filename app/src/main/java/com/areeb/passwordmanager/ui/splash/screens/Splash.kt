@@ -74,16 +74,13 @@ fun SplashScreen(navHostController: NavHostController) {
             withContext(Dispatchers.Main) {
                 delay(1000)
                 screenToNavigate = if (currentUser?.userName == null) {
-                Routes.SETUP_SCREEN
-            } else {
-                Routes.HOME
-            }
+                    Routes.SETUP_SCREEN
+                } else {
+                    Routes.ADD_PIN
+                }
                 navHostController.navigate(screenToNavigate)
 
             }
         }
-
-
     }
-
 }

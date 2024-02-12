@@ -31,11 +31,22 @@ class AuthRepository @Inject constructor(private val appDatabase: AppDatabase) {
         }
     }
 
-    fun getUser(): Flow<UserEntity> {
+    fun getUser(): Flow<UserEntity?> {
         return flow {
             try {
                 val data = appDatabase.userDao().getUserDetail()
                 emit(data)
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getCurrentUser(phoneNumber: String): Flow<UserEntity?> {
+        return flow {
+            try {
+                val user = appDatabase.userDao().getCurrentUser(phoneNumber)
+                emit(user)
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             }

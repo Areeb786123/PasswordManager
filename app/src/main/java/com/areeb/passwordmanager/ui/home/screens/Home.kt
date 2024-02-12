@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -68,6 +69,7 @@ import com.areeb.passwordmanager.ui.home.HomeViewModels
 import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
 import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.ADD_PASS_SCREEN
 import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.SETUP_SCREEN
+import com.areeb.passwordmanager.utils.sharedPreferences.GetSharedPreferences
 import com.areeb.passwordmanager.utils.statusColorChanger
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -75,6 +77,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(navHostController: NavHostController) {
+    val homeViewModels: HomeViewModels = hiltViewModel()
+    val dataViewModels: AddDataViewModels = hiltViewModel()
     statusColorChanger(color = colorResource(id = R.color.black))
     val systemUiController = rememberSystemUiController()
     systemUiController.isSystemBarsVisible = false
@@ -112,7 +116,7 @@ fun Home(navHostController: NavHostController) {
         },
         floatingActionButtonPosition = FabPosition.Center,
         content = {
-            Content(navHostController)
+            Content(navHostController, homeViewModels, dataViewModels)
         },
 
         )
@@ -120,15 +124,20 @@ fun Home(navHostController: NavHostController) {
 
 @Preview
 @Composable
-private fun Content(navigationHost: NavHostController) {
-    val homeViewModels: HomeViewModels = hiltViewModel()
-    val dataViewModels: AddDataViewModels = hiltViewModel()
+private fun Content(
+    navigationHost: NavHostController,
+    homeViewModels: HomeViewModels,
+    dataViewModels: AddDataViewModels
+) {
+    val context = LocalContext.current
+    val authViewModels: AuthViewModels = hiltViewModel()
+    authViewModels.getCurrentUser(GetSharedPreferences.getPhoneNumber(context).toString())
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.black)),
     ) {
-        CustomTopBar(navigationHost)
+        CustomTopBar(navigationHost, authViewModels)
         Spacer(modifier = Modifier.padding(top = 4.dp))
         SearchBar(homeViewModels)
         PasswordSection(navigationHost, homeViewModels, dataViewModels)
@@ -136,7 +145,7 @@ private fun Content(navigationHost: NavHostController) {
 }
 
 @Composable
-private fun CustomTopBar(navigationHost: NavHostController) {
+private fun CustomTopBar(navigationHost: NavHostController, authViewModels: AuthViewModels) {
     var isDashBoardVisible by remember {
         mutableStateOf(false)
     }
@@ -187,7 +196,7 @@ private fun CustomTopBar(navigationHost: NavHostController) {
                     ),
                 )
                 Text(
-                    text = "Guest",
+                    text = "${authViewModels.currentUser.value?.userName}",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorResource(

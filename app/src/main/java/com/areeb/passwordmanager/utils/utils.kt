@@ -17,6 +17,9 @@ fun statusColorChanger(color: Color) {
 interface StringConstant {
     companion object {
         const val PASSWORD_MANAGER_ENTITY = "passwordManagerEntity"
+        const val SHARED_PREFERENCES = "shared_preferences"
+        const val PIN  = "pin"
+        const val PHONE_NUMBER  = "phone_number"
     }
 
 }

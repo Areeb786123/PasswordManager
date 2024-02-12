@@ -62,6 +62,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     val compose_version = "1.5.2"
 
     implementation("androidx.core:core-ktx:1.9.0")
@@ -123,6 +124,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling:$compose_version")
     implementation("androidx.compose.foundation:foundation:$compose_version")
     implementation("com.airbnb.android:lottie-compose:6.0.1")
+    //Gson
+    implementation ("com.google.code.gson:gson:2.8.9")
 
 }
 // Allow references to generated code

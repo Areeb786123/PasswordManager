@@ -9,9 +9,11 @@ import com.areeb.passwordmanager.data.models.entity.UserEntity
 interface UserDao {
     @Insert
     suspend fun addUser(userEntity: UserEntity)
-
-    @Query("SELECT * FROM  userEntity")
+    @Query("SELECT * FROM userEntity")
     suspend fun getUserDetail(): UserEntity
+
+    @Query("SELECT * FROM userEntity WHERE phoneNumber = :phoneNumber")
+    suspend fun getCurrentUser(phoneNumber: String): UserEntity?
 
     @Query("DELETE FROM userEntity")
     suspend fun deleteUser()
