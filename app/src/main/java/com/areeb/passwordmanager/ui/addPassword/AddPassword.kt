@@ -1,6 +1,7 @@
 package com.areeb.passwordmanager.ui.addPassword
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +23,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,8 +44,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
 import com.areeb.passwordmanager.data.models.entity.PmEntity
+import com.areeb.passwordmanager.data.models.entity.UserEntity
 import com.areeb.passwordmanager.ui.addPassword.viewModels.AddDataViewModels
+import com.areeb.passwordmanager.ui.setUpScreen.viewModels.AuthViewModels
 import com.areeb.passwordmanager.utils.navigations.routes.Routes.Companion.HOME
+import com.areeb.passwordmanager.utils.sharedPreferences.GetSharedPreferences
 import com.areeb.passwordmanager.utils.statusColorChanger
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Locale
@@ -76,6 +81,10 @@ private fun Screen(navHostController: NavHostController) {
         mutableStateOf("")
     }
     val viewModel: AddDataViewModels = hiltViewModel()
+
+    val authViewModel: AuthViewModels = hiltViewModel()
+    authViewModel.getCurrentUser(GetSharedPreferences.getPhoneNumber(context = context).toString())
+    val currentUser = authViewModel.currentUser.collectAsState()
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -225,14 +234,25 @@ private fun Screen(navHostController: NavHostController) {
                             loginEmail = loginEmail,
                             password = password
                         )
-                        viewModel.addCredentials(
-                            pmEntity
-                        )
-
+                        val tempList = mutableListOf<PmEntity>()
+                        currentUser.value?.listOfPassWords?.let { tempList.addAll(it) }
+                        tempList.add(pmEntity)
+                        val userData = currentUser.value?.id?.let {
+                            UserEntity(
+                                id = it,
+                                currentUser.value?.userName,
+                                currentUser.value?.password,
+                                currentUser.value?.phoneNumber,
+                                tempList
+                            )
+                        }
+                        if (userData != null) {
+                            authViewModel.updateUser(userData)
+                        } else {
+                            Log.e("addPass", "user is null")
+                        }
                         navHostController.navigate(HOME)
                     }
-
-
                 },
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp),
             ) {

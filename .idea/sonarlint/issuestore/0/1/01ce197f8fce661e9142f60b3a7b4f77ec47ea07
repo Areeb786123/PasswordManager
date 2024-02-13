@@ -1,4 +1,5 @@
 
->kotlin:S1128"Remove this unused import.(ê ıõûÿÿÿÿ8‚ŸÃñØ1
->kotlin:S11281"Remove this unused import.(Úœåùÿÿÿÿ8‚ŸÃñØ1
-bkotlin:S6511Ö"=Merge chained "if" statements into a single "when" statement.(¢˜¸Æøÿÿÿÿ8†ŸÃñØ1
+Rkotlin:S1481S".Remove this unused "viewModel" local variable.(î¯Şİûÿÿÿÿ8ûÏç‘Ú1
+>kotlin:S1128"Remove this unused import.(ê ıõûÿÿÿÿ8ıÏç‘Ú1
+>kotlin:S11286"Remove this unused import.(Úœåùÿÿÿÿ8ıÏç‘Ú1
+bkotlin:S6511ß"=Merge chained "if" statements into a single "when" statement.(¢˜¸Æøÿÿÿÿ8ˆĞç‘Ú1

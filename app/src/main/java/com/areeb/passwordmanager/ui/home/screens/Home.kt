@@ -140,7 +140,7 @@ private fun Content(
         CustomTopBar(navigationHost, authViewModels)
         Spacer(modifier = Modifier.padding(top = 4.dp))
         SearchBar(homeViewModels)
-        PasswordSection(navigationHost, homeViewModels, dataViewModels)
+        PasswordSection(navigationHost, homeViewModels, dataViewModels, authViewModels)
     }
 }
 
@@ -313,7 +313,8 @@ private fun SearchBar(homeViewModel: HomeViewModels) {
 private fun PasswordSection(
     navigationHost: NavHostController,
     homeViewModels: HomeViewModels,
-    dataViewModels: AddDataViewModels
+    dataViewModels: AddDataViewModels,
+    authViewModels: AuthViewModels
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
@@ -328,7 +329,12 @@ private fun PasswordSection(
             color = colorResource(id = R.color.white),
         )
         Spacer(modifier = Modifier.padding(top = 10.dp))
-        PasswordList(navHostController = navigationHost, homeViewModels, dataViewModels)
+        PasswordList(
+            navHostController = navigationHost,
+            homeViewModels,
+            dataViewModels,
+            authViewModels
+        )
     }
 }
 
@@ -337,11 +343,13 @@ private fun PasswordSection(
 private fun PasswordList(
     navHostController: NavHostController,
     homeViewModels: HomeViewModels,
-    dataViewModels: AddDataViewModels
+    dataViewModels: AddDataViewModels,
+    authViewModels: AuthViewModels
 ) {
 
 
-    val dataList = dataViewModels.allCredentials.collectAsState()
+    val dataList = authViewModels.passWordList.collectAsState()
+
 
     var isBottomSheetOpen by remember {
         mutableStateOf(false)

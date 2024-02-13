@@ -2,7 +2,9 @@ package com.areeb.passwordmanager.ui.setUpScreen.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.areeb.passwordmanager.data.Repository.AuthRepository
+import com.areeb.passwordmanager.data.models.entity.PmEntity
 import com.areeb.passwordmanager.data.models.entity.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +26,9 @@ class AuthViewModels @Inject constructor(private val authRepository: AuthReposit
 
     private val _isNavigateAllowed = MutableStateFlow<Boolean>(false)
     val isNavigateAllowed = _isNavigateAllowed.asStateFlow()
+
+    private val _passWordList = MutableStateFlow<List<PmEntity>>(emptyList())
+    val passWordList: StateFlow<List<PmEntity>> get() = _passWordList
 
 
     init {
@@ -49,12 +54,19 @@ class AuthViewModels @Inject constructor(private val authRepository: AuthReposit
             authRepository.getCurrentUser(phoneNumber).collectLatest {
                 _currentUser.value = it
             }
+            _passWordList.value = _currentUser.value?.listOfPassWords ?: emptyList()
         }
     }
 
     fun deleteUser() {
         viewModelScope.launch {
             authRepository.deleteUser()
+        }
+    }
+
+    fun updateUser(userEntity: UserEntity) {
+        viewModelScope.launch {
+            authRepository.updateUser(userEntity)
         }
     }
 }

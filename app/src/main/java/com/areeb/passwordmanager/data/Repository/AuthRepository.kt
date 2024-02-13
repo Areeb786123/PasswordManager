@@ -52,4 +52,12 @@ class AuthRepository @Inject constructor(private val appDatabase: AppDatabase) {
             }
         }.flowOn(Dispatchers.IO)
     }
+
+    suspend fun updateUser(userEntity: UserEntity) {
+        try {
+            appDatabase.userDao().updateUser(userEntity)
+        } catch (e: Exception) {
+            Log.e(TAG, e.message.toString())
+        }
+    }
 }
