@@ -179,7 +179,6 @@ private fun Content(
 
                 Lifecycle.Event.ON_RESUME -> {
                     Log.d(TAG, "On Resume")
-                    Toast.makeText(context, "on resume called", Toast.LENGTH_SHORT).show()
                 }
 
                 Lifecycle.Event.ON_PAUSE -> {
@@ -442,63 +441,76 @@ private fun PasswordList(
         dataList.value.filter { it.appName.contains(query) }
     }
     Log.e("checkinq", homeViewModels.query.value)
-    LazyColumn(content = {
-        items(passWordList) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .clickable {
-                        isBottomSheetOpen = true
-                        id = it.id
-                        appName = it.appName
-                        pass = it.password
-                        loginEmail = it.loginEmail
+    if (dataList.value.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(
+                text = "No Saved Password Found 🤨",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = colorResource(id = R.color.white),
+                fontStyle = FontStyle.Normal,
+            )
+        }
+    } else {
+        LazyColumn(content = {
+            items(passWordList) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(80.dp)
+                        .clickable {
+                            isBottomSheetOpen = true
+                            id = it.id
+                            appName = it.appName
+                            pass = it.password
+                            loginEmail = it.loginEmail
 
-                    }
-                    .padding(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 10.dp),
-                shape = RoundedCornerShape(10.dp),
-                colors = CardDefaults.cardColors(colorResource(id = R.color.greish_black)),
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
+                        }
+                        .padding(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 10.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = CardDefaults.cardColors(colorResource(id = R.color.greish_black)),
                 ) {
-                    Card(
-                        modifier = Modifier
-                            .width(66.dp)
-                            .height(46.dp)
-                            .padding(start = 10.dp),
-                        colors = CardDefaults.cardColors(
-                            colorResource(id = R.color.blakish_grey),
-                        ),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 20.dp,
-                        ),
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.password_icons),
-                            contentDescription = "image",
+                        Card(
                             modifier = Modifier
-                                .width(50.dp)
-                                .height(50.dp),
-                            contentScale = ContentScale.FillBounds,
-                        )
+                                .width(66.dp)
+                                .height(46.dp)
+                                .padding(start = 10.dp),
+                            colors = CardDefaults.cardColors(
+                                colorResource(id = R.color.blakish_grey),
+                            ),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 20.dp,
+                            ),
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.password_icons),
+                                contentDescription = "image",
+                                modifier = Modifier
+                                    .width(50.dp)
+                                    .height(50.dp),
+                                contentScale = ContentScale.FillBounds,
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.padding(start = 10.dp))
+                        Text(
+                            text = it.appName,
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = colorResource(id = R.color.white),
+
+                            )
                     }
-
-                    Spacer(modifier = Modifier.padding(start = 10.dp))
-                    Text(
-                        text = it.appName,
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = colorResource(id = R.color.white),
-
-                        )
                 }
             }
-        }
-    })
+        })
+    }
+
 
     if (isBottomSheetOpen) {
         DetailScreen(
