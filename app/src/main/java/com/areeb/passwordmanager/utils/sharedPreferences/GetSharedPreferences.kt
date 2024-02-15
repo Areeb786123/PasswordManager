@@ -16,13 +16,20 @@ object GetSharedPreferences {
         val sp = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
         return sp.getInt(PIN, 0)
     }
+
     fun setPhoneNumber(context: Context, phoneNumber: Long) {
         val sp = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
-        sp.edit().putLong(PHONE_NUMBER, phoneNumber ).apply()
+        sp.edit().putLong(PHONE_NUMBER, phoneNumber).apply()
     }
 
     fun getPhoneNumber(context: Context): Long {
         val sp = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
         return sp.getLong(PHONE_NUMBER, 0)
+    }
+
+    fun clearText(context: Context) {
+        val sp = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        sp.edit().putInt(PIN, 0).apply()
+        sp.edit().putLong(PHONE_NUMBER, 0L).apply()
     }
 }

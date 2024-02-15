@@ -251,7 +251,11 @@ private fun Screen(navHostController: NavHostController) {
                         } else {
                             Log.e("addPass", "user is null")
                         }
-                        navHostController.navigate(HOME)
+                        navHostController.navigate(HOME) {
+                            popUpTo(navHostController.graph.id) {
+                                inclusive = true
+                            }
+                        }
                     }
                 },
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp),

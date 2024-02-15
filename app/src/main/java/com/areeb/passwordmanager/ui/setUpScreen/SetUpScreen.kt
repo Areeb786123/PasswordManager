@@ -145,7 +145,11 @@ private fun Body(navHostController: NavHostController) {
                         ) {
                             Log.e("tag", user.toString())
                             homeViewModels.saveUser(user)
-                            navHostController.navigate(HOME)
+                            navHostController.navigate(HOME){
+                                popUpTo(navHostController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
                             GetSharedPreferences.setPin(context, otp.toInt())
                             GetSharedPreferences.setPhoneNumber(context, phoneNumber.toLong())
                         }

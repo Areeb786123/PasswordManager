@@ -200,7 +200,12 @@ private fun RedirectUser(
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             delay(600) // Delay for 500 milliseconds
-            navHostController.navigate(HOME) // Navigate to HOME destination
+            navHostController.navigate(HOME){
+                popUpTo(navHostController.graph.id) {
+                    inclusive = true
+                }
+            } // Navigate to HOME destination
+
         }
     }
 

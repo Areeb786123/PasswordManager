@@ -2,7 +2,6 @@ package com.areeb.passwordmanager.ui.home.screens
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,7 +37,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -528,6 +526,7 @@ private fun PasswordList(
 @Composable
 private fun CustomDialog(showDialog: (Boolean) -> Unit, navigationHost: NavHostController) {
     val viewModel: AuthViewModels = hiltViewModel()
+    val context = LocalContext.current
     Dialog(
         onDismissRequest = { showDialog(false) },
         properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
@@ -550,6 +549,7 @@ private fun CustomDialog(showDialog: (Boolean) -> Unit, navigationHost: NavHostC
                         .clickable {
                             viewModel.deleteUser()
                             navigationHost.navigate(SETUP_SCREEN)
+                            GetSharedPreferences.clearText(context = context)
                         },
                     textAlign = TextAlign.Start,
                     color = colorResource(id = R.color.black),

@@ -78,7 +78,11 @@ fun SplashScreen(navHostController: NavHostController) {
                 } else {
                     Routes.ADD_PIN
                 }
-                navHostController.navigate(screenToNavigate)
+                navHostController.navigate(screenToNavigate) {
+                    popUpTo(navHostController.graph.id) {
+                        inclusive = true
+                    }
+                }
 
             }
         }
