@@ -30,6 +30,13 @@ class AuthViewModels @Inject constructor(private val authRepository: AuthReposit
     private val _passWordList = MutableStateFlow<List<PmEntity>>(emptyList())
     val passWordList: StateFlow<List<PmEntity>> get() = _passWordList
 
+    private val _isBottomSheetOpen = MutableStateFlow<Boolean>(false)
+    val isBottomSheetOpen: StateFlow<Boolean> get() = _isBottomSheetOpen
+
+
+    fun setBottomSheetValue(value: Boolean = false) {
+        _isBottomSheetOpen.value = value
+    }
 
     init {
         getUser()

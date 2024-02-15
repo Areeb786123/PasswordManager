@@ -2,6 +2,7 @@ package com.areeb.passwordmanager.ui.home.screens
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +37,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -60,6 +64,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import com.areeb.passwordmanager.R
 import com.areeb.passwordmanager.data.models.entity.PmEntity
@@ -122,6 +129,24 @@ fun Home(navHostController: NavHostController) {
         )
 }
 
+@Composable
+fun ComposableLifecycle(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    onEvent: (LifecycleOwner, Lifecycle.Event) -> Unit
+) {
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { source, event ->
+            onEvent(source, event)
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun Content(
@@ -141,6 +166,37 @@ private fun Content(
         Spacer(modifier = Modifier.padding(top = 4.dp))
         SearchBar(homeViewModels)
         PasswordSection(navigationHost, homeViewModels, dataViewModels, authViewModels)
+        val TAG = "Home"
+        ComposableLifecycle { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_CREATE -> {
+                    Log.d(TAG, "onCreate")
+                }
+
+                Lifecycle.Event.ON_START -> {
+                    Log.d(TAG, "On Start")
+                }
+
+                Lifecycle.Event.ON_RESUME -> {
+                    Log.d(TAG, "On Resume")
+                    Toast.makeText(context, "on resume called", Toast.LENGTH_SHORT).show()
+                }
+
+                Lifecycle.Event.ON_PAUSE -> {
+                    Log.d(TAG, "On Pause")
+                }
+
+                Lifecycle.Event.ON_STOP -> {
+                    Log.d(TAG, "On Stop")
+                }
+
+                Lifecycle.Event.ON_DESTROY -> {
+                    Log.d(TAG, "On Destroy")
+                }
+
+                else -> {}
+            }
+        }
     }
 }
 
@@ -347,12 +403,20 @@ private fun PasswordList(
     authViewModels: AuthViewModels
 ) {
 
+    val context = LocalContext.current
 
     val dataList = authViewModels.passWordList.collectAsState()
 
+    var isDetailScreenOpen = authViewModels.isBottomSheetOpen.collectAsState()
 
     var isBottomSheetOpen by remember {
         mutableStateOf(false)
+    }
+
+    if (isDetailScreenOpen.value) {
+        authViewModels.getCurrentUser(
+            GetSharedPreferences.getPhoneNumber(context = context).toString()
+        )
     }
 
     var id by remember {
@@ -438,7 +502,9 @@ private fun PasswordList(
 
     if (isBottomSheetOpen) {
         DetailScreen(
-            showBottomSheet = { isBottomSheetOpen = it },
+            showBottomSheet = {
+                isBottomSheetOpen = it
+            },
             passWordModel = PmEntity(id, appName, loginEmail, pass)
         )
     } else {
