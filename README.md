@@ -4,5 +4,6 @@
 
 </br>
 
-![MacBook Air - 1](https://github.com/Areeb786123/PasswordManager/assets/56149022/88135eba-93d6-4741-9a25-2b9db108be67)
+![MacBook Air - 1 (1)](https://github.com/Areeb786123/PasswordManager/assets/56149022/f9bd638c-90e5-4c5b-8f0b-210282b82de9)
+
 
