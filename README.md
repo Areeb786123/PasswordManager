@@ -1,1 +1,1 @@
-![Frame 1 2](https://github.com/Areeb786123/PasswordManager/assets/56149022/b6d04cca-a2b4-4ead-8727-5c9dc1591ea7)
+![Frame 1 (1)](https://github.com/Areeb786123/PasswordManager/assets/56149022/15174b52-bac4-4c6a-bf2b-ec1d4e6889ec)
